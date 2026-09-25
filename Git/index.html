@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MITSUKETA</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ==================== -->
+    <!-- ログイン -->
+    <!-- ==================== -->
+
+    <div id="loginPage" class="login-page">
+
+        <div class="login-box">
+
+            <h1>MITSUKETA</h1>
+
+            <p class="login-copy">
+                隠れたゲームを見つけよう。
+            </p>
+
+            <input
+                type="text"
+                id="loginId"
+                placeholder="ユーザーID"
+            >
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="パスワード"
+            >
+
+            <button onclick="login()" class="main-button">
+                ログイン
+            </button>
+
+            <p id="loginError" class="error"></p>
+
+            <button onclick="showRegister()" class="link-button">
+                新規登録はこちら
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================== -->
+    <!-- 新規登録 -->
+    <!-- ==================== -->
+
+    <div id="registerPage" class="login-page hidden">
+
+        <div class="login-box">
+
+            <h1>MITSUKETA</h1>
+
+            <p class="login-copy">
+                アカウントを作成
+            </p>
+
+            <input
+                type="text"
+                id="registerName"
+                placeholder="ユーザー名"
+            >
+
+            <input
+                type="text"
+                id="registerId"
+                placeholder="ユーザーID"
+            >
+
+            <input
+                type="password"
+                id="registerPassword"
+                placeholder="パスワード"
+            >
+
+            <button onclick="register()" class="main-button">
+                新規登録
+            </button>
+
+            <p id="registerError" class="error"></p>
+
+            <button onclick="showLogin()" class="link-button">
+                ログインに戻る
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ==================== -->
+    <!-- アプリ本体 -->
+    <!-- ==================== -->
+
+    <div id="app" class="app hidden">
+
+        <!-- ヘッダー -->
+
+        <header class="header">
+
+            <h1 onclick="showHome()">
+                MITSUKETA
+            </h1>
+
+            <button
+                class="notification-button"
+                onclick="showNotifications()"
+            >
+                🔔
+                <span id="notificationCount"></span>
+            </button>
+
+        </header>
+
+
+        <!-- ==================== -->
+        <!-- ホーム -->
+        <!-- ==================== -->
+
+        <main id="homePage" class="page">
+
+            <div class="tabs">
+
+                <button
+                    id="recommendTab"
+                    class="active"
+                    onclick="changeTab('recommend')"
+                >
+                    おすすめ
+                </button>
+
+                <button
+                    id="followTab"
+                    onclick="changeTab('follow')"
+                >
+                    フォロー中
+                </button>
+
+            </div>
+
+            <div id="postList"></div>
+
+        </main>
+
+
+        <!-- ==================== -->
+        <!-- 投稿画面 -->
+        <!-- ==================== -->
+
+        <main id="postPage" class="page hidden">
+
+            <div class="page-title">
+
+                <button onclick="showHome()">
+                    ←
+                </button>
+
+                <h2>投稿</h2>
+
+            </div>
+
+
+            <div class="post-user">
+
+                <div class="avatar">
+                    🎮
+                </div>
+
+                <div>
+                    <strong id="postUserName"></strong>
+                    <span id="postUserId"></span>
+                </div>
+
+            </div>
+
+
+            <!-- 画像 -->
+
+            <label class="image-upload">
+
+                <input
+                    type="file"
+                    id="imageInput"
+                    accept="image/*"
+                    onchange="previewImage(event)"
+                >
+
+                <span id="imageText">
+                    ＋ ゲーム画像を追加
+                </span>
+
+                <img
+                    id="imagePreview"
+                    class="image-preview hidden"
+                >
+
+            </label>
+
+
+            <!-- 投稿文 -->
+
+            <textarea
+                id="postText"
+                placeholder="このゲームについて教えてください！"
+            ></textarea>
+
+
+            <!-- タグ -->
+
+            <input
+                type="text"
+                id="tagInput"
+                placeholder="#隠れた名作 #おすすめゲーム"
+            >
+
+
+            <!-- メンション -->
+
+            <input
+                type="text"
+                id="mentionInput"
+                placeholder="@ユーザーIDを入力"
+            >
+
+
+            <button
+                onclick="createPost()"
+                class="main-button post-button"
+            >
+                投稿する
+            </button>
+
+        </main>
+
+
+        <!-- ==================== -->
+        <!-- 通知 -->
+        <!-- ==================== -->
+
+        <main id="notificationPage" class="page hidden">
+
+            <div class="page-title">
+
+                <button onclick="showHome()">
+                    ←
+                </button>
+
+                <h2>通知</h2>
+
+            </div>
+
+            <div id="notificationList"></div>
+
+        </main>
+
+
+        <!-- ==================== -->
+        <!-- プロフィール -->
+        <!-- ==================== -->
+
+        <main id="profilePage" class="page hidden">
+
+            <div class="profile-header">
+
+                <div class="profile-avatar">
+                    🎮
+                </div>
+
+                <h2 id="profileName"></h2>
+
+                <p id="profileId"></p>
+
+                <p id="profileBio"></p>
+
+                <div class="profile-count">
+
+                    <div>
+                        <strong id="postCount">0</strong>
+                        <span>投稿</span>
+                    </div>
+
+                    <div>
+                        <strong id="followingCount">0</strong>
+                        <span>フォロー</span>
+                    </div>
+
+                    <div>
+                        <strong id="followerCount">0</strong>
+                        <span>フォロワー</span>
+                    </div>
+
+                </div>
+
+                <button
+                    onclick="showProfileSetting()"
+                    class="edit-button"
+                >
+                    プロフィール編集
+                </button>
+
+            </div>
+
+            <div id="profilePosts"></div>
+
+        </main>
+
+
+        <!-- ==================== -->
+        <!-- プロフィール編集 -->
+        <!-- ==================== -->
+
+        <main id="profileSettingPage" class="page hidden">
+
+            <div class="page-title">
+
+                <button onclick="showMyProfile()">
+                    ←
+                </button>
+
+                <h2>プロフィール編集</h2>
+
+            </div>
+
+
+            <label>
+                ユーザー名
+            </label>
+
+            <input
+                type="text"
+                id="editName"
+            >
+
+
+            <label>
+                ユーザーID
+            </label>
+
+            <input
+                type="text"
+                id="editId"
+            >
+
+
+            <label>
+                自己紹介
+            </label>
+
+            <textarea
+                id="editBio"
+                placeholder="ゲームについて一言"
+            ></textarea>
+
+
+            <button
+                onclick="saveProfile()"
+                class="main-button"
+            >
+                保存する
+            </button>
+
+        </main>
+
+
+        <!-- ==================== -->
+        <!-- 下部ナビ -->
+        <!-- ==================== -->
+
+        <nav class="bottom-nav">
+
+            <button onclick="showHome()">
+                <span>🏠</span>
+                <small>ホーム</small>
+            </button>
+
+            <button
+                onclick="showPostPage()"
+                class="post-nav"
+            >
+                <span>＋</span>
+            </button>
+
+            <button onclick="showMyProfile()">
+                <span>👤</span>
+                <small>プロフィール</small>
+            </button>
+
+        </nav>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
